@@ -1,35 +1,4 @@
-lzc-sdk-version: '0.1'
-package: fun.selfstudio.app.migration.remodex-relay
-version: 1.0.0
-min_os_version: 1.3.8
-name: Remodex Relay
-description: WebSocket relay service for Remodex pairing flow
-license: ISC
-homepage: https://github.com/Emanuele-web04/remodex
-author: Emanuele Di Pietro
-application:
-  subdomain: remodex-relay
-  public_path:
-    - /
-  upstreams:
-    - location: /
-      backend: http://remodex-relay:3000/
-services:
-  remodex-relay:
-    image: docker.io/library/node:20-alpine
-    command: "node /app/server.js"
-    working_dir: /app
-    environment: {}
-    binds: []
-    setup_script: |
-      # Install ws package
-      npm install --production ws
-      # Copy application files
-      cp /lzcapp/pkg/content/* ./
-locales:
-  en:
-    name: Remodex Relay
-    description: WebSocket relay service for Remodex pairing flow
-  zh:
-    name: Remodex Relay
-    description: Remodex 配对流程的 WebSocket 中继服务
+manifest: ./lzc-manifest.yml
+pkgout: ./
+icon: ./icon.png
+contentdir: ./content
