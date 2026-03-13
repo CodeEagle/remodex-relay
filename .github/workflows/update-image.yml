@@ -20,18 +20,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.image.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Get version from lzc-build.yml
         id: version
@@ -39,22 +32,12 @@ jobs:
           VERSION=$(grep '^version:' lzc-build.yml | awk '{print $2}')
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
 
-      - name: Set lowercase repository name
-        id: repo
+      - name: Set image tag
+        id: image
         run: |
-          echo "repo_lower=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: |
-            codeeagle/remodex-relay:${{ steps.version.outputs.version }}
-            codeeagle/remodex-relay:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          echo "tag=docker.io/codeeagle/remodex-relay:${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
 
       - name: Output image info
         run: |
-          echo "Image pushed: codeeagle/remodex-relay:${{ steps.version.outputs.version }}"
+          echo "Image tag: ${{ steps.image.outputs.tag }}"
+          echo "Note: Image needs to be built and pushed to Docker Hub manually or via configured secrets."

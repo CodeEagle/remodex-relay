@@ -16,9 +16,16 @@ application:
       backend: http://remodex-relay:3000/
 services:
   remodex-relay:
-    image: registry.lazycat.cloud/codeeagle/remodex-relay:latest
+    image: docker.io/library/node:20-alpine
+    command: "node /app/server.js"
+    working_dir: /app
     environment: {}
     binds: []
+    setup_script: |
+      # Install ws package
+      npm install --production ws
+      # Copy application files
+      cp /lzcapp/pkg/content/* ./
 locales:
   en:
     name: Remodex Relay
