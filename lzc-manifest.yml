@@ -16,18 +16,17 @@ application:
       backend: http://remodex-relay:3000/
 services:
   remodex-relay:
-    image: registry.lazycat.cloud/invokerlaw/codeeagle/remodex-relay:latest
-    command: "node /app/server.js"
+    image: registry.lazycat.cloud/invokerlaw/library/node:8e74c49667952d1e
     working_dir: /app
     environment:
       PORT: "3000"
     binds: []
     setup_script: |
-      # Install ws package
-      npm install --production ws
-      # Copy application files to /app
       mkdir -p /app
-      cp /lzcapp/pkg/content/* /app/
+      cp -r /lzcapp/pkg/content/* /app/
+      cd /app
+      npm install --production
+      node /app/server.js
 locales:
   en:
     name: Remodex Relay

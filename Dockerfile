@@ -12,5 +12,3 @@ RUN npm install --production
 COPY server.js relay.js index.html ./
 
 EXPOSE 3000
-
-CMD ["node", "server.js"]
