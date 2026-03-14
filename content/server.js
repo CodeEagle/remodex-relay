@@ -48,10 +48,7 @@ const server = http.createServer((req, res) => {
 });
 
 // Create WebSocket server attached to HTTP server
-const wss = new WebSocket.Server({
-  server,
-  path: "/relay",
-});
+const wss = new WebSocket.Server({ server });
 
 // Setup relay behavior
 setupRelay(wss);
